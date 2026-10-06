@@ -1,36 +1,51 @@
+import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Contacts from '../components/Contacts'
 import LetterTiles from '../components/LetterTiles'
 import OrderBlock from '../components/OrderBlock'
 import ProjectCard from '../components/ProjectCard'
+import CategoryList from '../components/CategoryList'
+import { useCopy, useLocalizedProjects } from '../i18n/LanguageContext'
 import { catalogProjects } from '../data/projects'
-import servicesImage from '../assets/services.png'
+import servicesImage from '../assets/services.jpg'
 import unionMark from '../assets/union.svg'
+import aboutMark from '../assets/union-about.svg'
 
-const tags = ['/hbd', '/weddings', '/anniversaires', '/parties']
-
-const stats = [
-  {
-    value: '250+',
-    label: 'projects we implemented in the field of private events design',
-  },
-  {
-    value: '10+',
-    label: 'years we work in the field of set design',
-  },
-]
-
-const benefits = [
-  'Full cycle: from concept to installation',
-  'In-house production facilities',
-  'Fast turnaround times thanks to in-house operations',
-  'Quality control at all stages',
-  'Custom and unique solutions',
-  'Budget optimization without unnecessary contractors',
-]
+function layoutBenefitCurves(list) {
+  if (!list) return
+  const items = [...list.children]
+  items.forEach((li, index) => {
+    const next = items[index + 1]
+    if (!next) return
+    const from = li.querySelector('.service-benefits-num')
+    const to = next.querySelector('.service-benefits-num')
+    if (!from || !to) return
+    const a = from.getBoundingClientRect()
+    const b = to.getBoundingClientRect()
+    li.style.setProperty('--curve-h', `${b.top + b.height / 2 - (a.top + a.height / 2)}px`)
+  })
+}
 
 function ServicesPage() {
+  const t = useCopy()
+  const projects = useLocalizedProjects(catalogProjects)
+  const benefitsListRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const list = benefitsListRef.current
+    if (!list) return
+    const update = () => layoutBenefitCurves(list)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(list)
+    window.addEventListener('resize', update)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [t.servicePage.benefits])
+
   return (
     <div className="page service-page">
       <div className="service-page-top">
@@ -40,19 +55,15 @@ function ServicesPage() {
       <section className="service-hero">
         <div className="service-hero-copy">
           <h1>
-            PRIVATE
+            {t.servicePage.title[0]}
             <br />
-            EVENT
+            {t.servicePage.title[1]}
             <br />
-            DESIGN
+            {t.servicePage.title[2]}
           </h1>
-          <div className="service-tags">
-            {tags.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </div>
+          <CategoryList />
           <ul className="service-stats">
-            {stats.map((item) => (
+            {t.servicePage.stats.map((item) => (
               <li key={item.value}>
                 <strong>{item.value}</strong>
                 <span>{item.label}</span>
@@ -73,71 +84,37 @@ function ServicesPage() {
       </section>
 
       <section className="service-about">
-        <LetterTiles text="ABOUT US" />
-        <p className="service-about-lead">
-          We create immersive, tailor-made decor concepts for private events
-          that transform ordinary spaces into truly unforgettable, visually
-          striking experiences filled with emotion.
-        </p>
+        <LetterTiles text={t.servicePage.aboutTiles} />
+        <p className="service-about-lead">{t.servicePage.aboutLead}</p>
         <div className="service-about-body">
-          <img className="service-union service-union-about" src={unionMark} alt="" />
+          <img className="service-union service-union-about" src={aboutMark} alt="" />
           <div className="service-about-copy">
-            <p>
-              From intimate birthday celebrations and elegant dinners to
-              engagement parties and exclusive gatherings, our team handles
-              every visual detail with creativity and precision. Our service
-              includes concept development, mood boards, color palette
-              selection, floral and table styling, custom installations, and
-              on-site setup. We work closely with each client to reflect their
-              personality, vision, and the unique atmosphere they want to
-              create.
-            </p>
-            <p>
-              Whether you dream of a chic modern look, romantic elegance, or a
-              bold themed celebration, we craft cohesive aesthetics that feel
-              both stylish and personal. With a strong eye for composition and
-              trend-aware design, we ensure your event looks stunning in real
-              life and in photos. Let us turn your private event into a
-              beautifully curated experience that guests will remember long
-              after the celebration ends.
-            </p>
+            <p>{t.servicePage.aboutP1}</p>
+            <p>{t.servicePage.aboutP2}</p>
           </div>
         </div>
       </section>
 
       <section className="service-benefits">
         <div className="service-benefits-left">
-          <h2>BENEFITS</h2>
-          <p className="service-benefits-note">
-            We are deeply immersed in the clients tasks and take over the entire
-            organization — from the development of a creative concept to the
-            final implementation on the site.
-          </p>
+          <h2>{t.servicePage.benefitsTitle}</h2>
+          <p className="service-benefits-note">{t.servicePage.benefitsNote}</p>
         </div>
-        <p className="service-benefits-lead">
-          We are a full-service agency with in-house production: from concept
-          and design to manufacturing and installation. Our in-house facilities
-          allow us to launch projects faster, control quality at every stage,
-          and create custom solutions without outsourcing. This saves budget
-          and investment, and ensures a consistent, high standard of execution.
-        </p>
-        <ol className="service-benefits-list">
-          {benefits.map((item, index) => (
+        <p className="service-benefits-lead">{t.servicePage.benefitsLead}</p>
+        <ol className="service-benefits-list" ref={benefitsListRef}>
+          {t.servicePage.benefits.map((item, index) => (
             <li key={item}>
-              {index < benefits.length - 1 ? (
+              {index < t.servicePage.benefits.length - 1 ? (
                 <svg
                   className="service-benefits-curve"
-                  viewBox="0 0 40 80"
+                  viewBox="0 0 50 100"
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
                   <path
-                    d="M40 1.2 C 1.6 1.2, 1.6 78.8, 40 78.8"
+                    d="M50 0 A 50 50 0 0 0 50 100"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeDasharray="0.2 5.2"
                     vectorEffect="non-scaling-stroke"
                   />
                 </svg>
@@ -153,14 +130,14 @@ function ServicesPage() {
 
       <section className="service-projects">
         <div className="section-bar">
-          <LetterTiles text="SERVICES" />
+          <LetterTiles text={t.servicePage.projectsTiles} />
           <Link className="text-underline" to="/projects">
-            view all projects
+            {t.projects.viewAll}
           </Link>
         </div>
         <div className="projects-grid">
-          {catalogProjects.map((project) => (
-            <ProjectCard project={project} key={project.slug} />
+          {projects.map((project) => (
+            <ProjectCard project={project} key={project.slug} cta={t.projects.readMore} />
           ))}
         </div>
       </section>

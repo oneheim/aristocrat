@@ -5,6 +5,7 @@ import Services from '../components/Services'
 import SelectedProject from '../components/SelectedProject'
 import Reviews from '../components/Reviews'
 import Clients from '../components/Clients'
+import OrderBlock from '../components/OrderBlock'
 import Contacts from '../components/Contacts'
 
 function Home() {
@@ -17,6 +18,7 @@ function Home() {
       <SelectedProject />
       <Reviews />
       <Clients />
+      <OrderBlock />
       <Contacts />
     </div>
   )

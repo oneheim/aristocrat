@@ -1,12 +1,18 @@
+import { useLanguage } from '../i18n/LanguageContext'
+import orderMarkEn from '../assets/order-mark-en.svg'
+import orderMarkRu from '../assets/order-mark-ru.svg'
+
 function OrderBlock() {
+  const { lang, t } = useLanguage()
+
   return (
     <section className="order-block" id="order">
       <div className="order-title">
-        <h2>
-          ORDER
-          <br />
-          A PROJECT
-        </h2>
+        <img
+          className="order-title-mark"
+          src={lang === 'ru' ? orderMarkRu : orderMarkEn}
+          alt={t.order.title.join(' ')}
+        />
       </div>
 
       <form
@@ -17,31 +23,33 @@ function OrderBlock() {
       >
         <div className="order-form-row">
           <label>
-            name
-            <input type="text" name="name" autoComplete="name" />
+            <span className="order-field-label">{t.order.name}</span>
+            <input type="text" name="name" autoComplete="name" placeholder={t.order.name} />
           </label>
           <label>
-            e-mail
-            <input type="email" name="email" autoComplete="email" />
+            <span className="order-field-label">{t.order.email}</span>
+            <input type="email" name="email" autoComplete="email" placeholder={t.order.email} />
           </label>
           <label>
-            phone
-            <input type="tel" name="phone" autoComplete="tel" />
+            <span className="order-field-label">{t.order.phone}</span>
+            <input type="tel" name="phone" autoComplete="tel" placeholder={t.order.phone} />
           </label>
         </div>
         <label className="order-message">
-          message
-          <textarea name="message" rows="1" />
+          <span className="order-field-label">{t.order.message}</span>
+          <textarea name="message" rows="1" placeholder={t.order.message} />
         </label>
         <label className="order-consent">
           <input type="checkbox" name="consent" />
           <span>
-            By clicking on the “Send” button, I confirm my consent to the{' '}
-            <em>processing of personal data</em> and the provisions of the{' '}
-            <em>Privacy Policy</em>.
+            {t.order.consentBefore}
+            <em>{t.order.consentPersonal}</em>
+            {t.order.consentAnd}
+            <em>{t.order.consentPrivacy}</em>
+            {t.order.consentAfter}
           </span>
         </label>
-        <button type="submit">Send</button>
+        <button type="submit">{t.order.send}</button>
       </form>
     </section>
   )

@@ -2,8 +2,6 @@ import AboutHero from '../components/AboutHero'
 import WhoWeAre from '../components/WhoWeAre'
 import Facts from '../components/Facts'
 import Team from '../components/Team'
-import Projects from '../components/Projects'
-import Reviews from '../components/Reviews'
 import Clients from '../components/Clients'
 import OrderBlock from '../components/OrderBlock'
 import Contacts from '../components/Contacts'
@@ -15,8 +13,6 @@ function AboutPage() {
       <WhoWeAre />
       <Facts />
       <Team />
-      <Projects />
-      <Reviews />
       <Clients />
       <OrderBlock />
       <Contacts />

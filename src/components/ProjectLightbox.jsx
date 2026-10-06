@@ -15,7 +15,7 @@ function Arrow({ dir }) {
   )
 }
 
-function ProjectLightbox({ images, index, onClose, onChange }) {
+function ProjectLightbox({ images, index, onClose, onChange, labels }) {
   useEffect(() => {
     if (index == null) return undefined
 
@@ -45,7 +45,7 @@ function ProjectLightbox({ images, index, onClose, onChange }) {
   const next = () => onChange((index + 1) % images.length)
 
   return (
-    <div className="lightbox" role="dialog" aria-modal="true" aria-label="Project photos">
+    <div className="lightbox" role="dialog" aria-modal="true" aria-label={labels.aria}>
       <div className="lightbox-stage" onClick={onClose}>
         <img src={images[index]} alt="" onClick={(event) => event.stopPropagation()} />
       </div>
@@ -57,7 +57,7 @@ function ProjectLightbox({ images, index, onClose, onChange }) {
               key={`${src}-${i}`}
               className={i === index ? 'is-current' : undefined}
               onClick={() => onChange(i)}
-              aria-label={`Photo ${i + 1}`}
+              aria-label={labels.photo(i + 1)}
               aria-current={i === index ? 'true' : undefined}
             >
               <img src={src} alt="" />
@@ -65,10 +65,10 @@ function ProjectLightbox({ images, index, onClose, onChange }) {
           ))}
         </div>
         <div className="lightbox-nav">
-          <button type="button" aria-label="Previous photo" onClick={prev}>
+          <button type="button" aria-label={labels.prev} onClick={prev}>
             <Arrow dir="prev" />
           </button>
-          <button type="button" aria-label="Next photo" onClick={next}>
+          <button type="button" aria-label={labels.next} onClick={next}>
             <Arrow dir="next" />
           </button>
         </div>

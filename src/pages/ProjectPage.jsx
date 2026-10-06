@@ -6,11 +6,14 @@ import LetterTiles from '../components/LetterTiles'
 import OrderBlock from '../components/OrderBlock'
 import ProjectCard from '../components/ProjectCard'
 import ProjectLightbox from '../components/ProjectLightbox'
-import { getProject, getRelevant } from '../data/projects'
+import { useLanguage } from '../i18n/LanguageContext'
+import { getProject, getRelevant, localizeProject } from '../data/projects'
 
 function ProjectPage() {
   const { slug } = useParams()
-  const project = getProject(slug)
+  const { lang, t } = useLanguage()
+  const source = getProject(slug)
+  const project = localizeProject(source, lang)
   const [lightbox, setLightbox] = useState(null)
 
   useEffect(() => {
@@ -22,14 +25,14 @@ function ProjectPage() {
     setLightbox(index)
   }, [])
 
-  if (!project) {
+  if (!source) {
     return <Navigate to="/projects" replace />
   }
 
   const gallery = project.gallery
   const pic = (index) => gallery[index % gallery.length]
   const cardPhoto = pic(1)
-  const relevant = getRelevant(project.slug)
+  const relevant = getRelevant(project.slug).map((item) => localizeProject(item, lang))
 
   return (
     <div className="page project-page">
@@ -65,7 +68,7 @@ function ProjectPage() {
       </section>
 
       <section className="case-intro">
-        <LetterTiles text="ABOUT" />
+        <LetterTiles text={t.case.about} />
 
         <div className="case-intro-body">
           <img className="case-intro-main" src={pic(0)} alt="" />
@@ -84,8 +87,8 @@ function ProjectPage() {
         </div>
       </section>
 
-      <section className="case-mosaic" aria-label="Project gallery">
-        <LetterTiles text="GALLERY" />
+      <section className="case-mosaic" aria-label={t.case.galleryAria}>
+        <LetterTiles text={t.case.gallery} />
 
         <div className="case-mosaic-top">
           <button type="button" className="case-mosaic-main" onClick={() => openLightbox(0)}>
@@ -128,7 +131,7 @@ function ProjectPage() {
       </section>
 
       <section className="case-facts">
-        <LetterTiles text="FACTS" />
+        <LetterTiles text={t.case.facts} />
         <div className="facts-grid">
           {project.facts.map((item) => (
             <article className="facts-panel" key={item.value}>
@@ -150,14 +153,14 @@ function ProjectPage() {
 
       <section className="case-relevant">
         <div className="section-bar">
-          <LetterTiles text="RELEVANT PROJECTS" />
+          <LetterTiles text={t.case.relevant} />
           <Link className="text-underline" to="/projects">
-            view all projects
+            {t.projects.viewAll}
           </Link>
         </div>
         <div className="projects-grid">
           {relevant.map((item) => (
-            <ProjectCard project={item} key={item.slug} />
+            <ProjectCard project={item} key={item.slug} cta={t.projects.readMore} />
           ))}
         </div>
       </section>
@@ -169,6 +172,12 @@ function ProjectPage() {
         index={lightbox}
         onClose={() => setLightbox(null)}
         onChange={setLightbox}
+        labels={{
+          aria: t.case.lightboxAria,
+          photo: t.case.photo,
+          prev: t.case.prev,
+          next: t.case.next,
+        }}
       />
     </div>
   )

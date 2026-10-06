@@ -1,42 +1,37 @@
 import LetterTiles from './LetterTiles'
-import factsImage from '../assets/fact-texture-1.jpg'
-
-const facts = [
-  {
-    value: '>600',
-    label:
-      'completed projects ranging from chamber presentations to large-scale corporate events and city festivals.',
-  },
-  {
-    value: '30%',
-    label:
-      'budget savings for clients due to work without third-party contractors and a full in-house production cycle.',
-  },
-  {
-    value: '>900',
-    label:
-      'square meters area of own production facility including mock-up, milling and welding workshops, as well as 3D and large-format printing.',
-  },
-  {
-    value: '<72',
-    label:
-      'hours to develop and launch non-standard designs thanks to our own design team and production facilities.',
-  },
-]
+import { useCopy } from '../i18n/LanguageContext'
+import factsPhoto from '../assets/facts-photo.jpg'
 
 function Facts() {
+  const t = useCopy()
+
   return (
     <section className="about-facts">
-      <LetterTiles text="FACTS" />
+      <div className="about-facts-stage">
+        <div className="about-facts-title">
+          <LetterTiles text={t.facts.tiles} />
+        </div>
 
-      <div className="about-facts-grid">
-        {facts.map((fact) => (
-          <div className="about-fact-item" key={fact.value}>
+        {t.facts.items.map((fact, index) => (
+          <article className={`about-fact about-fact-${index}`} key={fact.value}>
             <strong>{fact.value}</strong>
             <span>{fact.label}</span>
-          </div>
+          </article>
         ))}
-        <img className="about-facts-photo" src={factsImage} alt="" />
+
+        <img className="about-facts-photo" src={factsPhoto} alt="" />
+
+        <svg
+          className="about-facts-stairs"
+          viewBox="0 0 2000 1080"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d="M100 500 V580 H145 V670 H190 V760" />
+          <path d="M670 430 V490 H630 V545 H700 V600 H860 V690 H980 V780 H1120" />
+          <path d="M830 1000 H1000 V1040 H1140" />
+          <path d="M1480 400 V560 H1410 V640 H1495 V720 H1586" />
+        </svg>
       </div>
     </section>
   )

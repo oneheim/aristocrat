@@ -1,28 +1,21 @@
 import { Link } from 'react-router-dom'
 import LetterTiles from './LetterTiles'
+import { useCopy } from '../i18n/LanguageContext'
 import aboutImage from '../assets/about.png'
 import unionMark from '../assets/union.svg'
 
-const stats = [
-  { value: '10+ years', label: 'we work in the field of set design' },
-  { value: '80+', label: 'employees on staff' },
-  { value: '600+', label: 'successfully implemented projects' },
-]
-
 function About() {
+  const t = useCopy()
+
   return (
     <section className="about" id="about">
-      <LetterTiles text="ABOUT US" />
+      <LetterTiles text={t.about.tiles} />
 
-      <p className="about-lead">
-        ARISTOCRAT — international full-service event production. For five
-        years, we’ve been designing private and corporate events, exhibitions,
-        art spaces & large-scale concepts worldwide.
-      </p>
+      <p className="about-lead">{t.about.lead}</p>
 
       <div className="about-body">
         <ul className="about-stats">
-          {stats.map((item) => (
+          {t.about.stats.map((item) => (
             <li key={item.value}>
               <strong>{item.value}</strong>
               <span>{item.label}</span>
@@ -31,9 +24,9 @@ function About() {
         </ul>
 
         <figure className="about-frame">
-          <img src={aboutImage} alt="ARISTOCRAT team" />
+          <img src={aboutImage} alt={t.about.teamAlt} />
           <Link className="text-underline" to="/about">
-            read more
+            {t.about.readMore}
           </Link>
         </figure>
 

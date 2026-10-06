@@ -1,29 +1,21 @@
-import image1 from '../assets/moscow-1.png'
-import image2 from '../assets/moscow-2.png'
-import image3 from '../assets/moscow-3.png'
-import image4 from '../assets/moscow-4.png'
+import { useCopy } from '../i18n/LanguageContext'
+import image1 from '../assets/who-1.jpg'
+import image2 from '../assets/who-2.jpg'
+import image3 from '../assets/who-3.jpg'
+import image4 from '../assets/who-4.jpg'
+import image5 from '../assets/who-5.jpg'
+import image6 from '../assets/who-6.jpg'
 
-const images = [image1, image2, image3, image4]
+const images = [image1, image2, image3, image4, image5, image6]
 
 function WhoWeAre() {
+  const t = useCopy()
+
   return (
     <section className="who-we-are">
-      <h2>Who are we?</h2>
-
-      <div className="who-we-are-copy">
-        <p>
-          We are a full—service event agency with our own production base and
-          a creative team.
-        </p>
-        <p>
-          We create events of any complexity: from concept and design
-          development to production of decorations, installation and
-          technical implementation on the site. By combining strategy,
-          creativity and production in one team, we guarantee the accuracy of
-          execution, compliance with deadlines and a high level of quality at
-          every stage of the project.
-        </p>
-      </div>
+      <h2>{t.who.title}</h2>
+      <p className="who-we-are-lead">{t.who.p1}</p>
+      <p className="who-we-are-body">{t.who.p2}</p>
 
       <div className="who-we-are-grid">
         {images.map((image, index) => (
@@ -31,13 +23,7 @@ function WhoWeAre() {
         ))}
       </div>
 
-      <p className="who-we-are-note">
-        We are able to work with both large-scale corporate events and
-        immersive camera formats. Thanks to our own workshops and design
-        department, we translate complex ideas into real designs, decorations
-        and interactive solutions that fully correspond to the concept of the
-        event.
-      </p>
+      <p className="who-we-are-note">{t.who.note}</p>
     </section>
   )
 }

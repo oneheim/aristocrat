@@ -1,4 +1,5 @@
 import LetterTiles from './LetterTiles'
+import { useLanguage } from '../i18n/LanguageContext'
 import { team, teamExtraCount } from '../data/team'
 
 function initials(name) {
@@ -9,9 +10,11 @@ function initials(name) {
 }
 
 function Team() {
+  const { lang, t } = useLanguage()
+
   return (
     <section className="team">
-      <LetterTiles text="TEAM" />
+      <LetterTiles text={t.team.tiles} />
 
       <div className="team-grid">
         {team.map((member) => (
@@ -20,13 +23,13 @@ function Team() {
               {initials(member.name)}
             </span>
             <strong>{member.name}</strong>
-            <span>{member.role}</span>
+            <span>{lang === 'ru' ? member.roleRu : member.role}</span>
           </article>
         ))}
 
         <article className="team-card team-card-more">
           <strong>+{teamExtraCount}</strong>
-          <span className="text-underline">view all staff members</span>
+          <span className="text-underline">{t.team.viewAll}</span>
         </article>
       </div>
     </section>
